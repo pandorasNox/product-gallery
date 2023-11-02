@@ -1,0 +1,66 @@
+
+version: '3.7'
+
+services:
+
+  postgres:
+    image: postgres:14.2-alpine3.15
+    restart: always
+    environment:
+      POSTGRES_DB: rootdb
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+
+  adminer:
+    image: adminer:4.8.1
+    restart: always
+    ports:
+      - 8080:8080
+
+  migrate:
+    build:
+      context: ./
+      dockerfile: ./cicd/container-images/migrate/Dockerfile
+    volumes:
+      - ./migrations:/migrations:ro
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: root
+      PGPASSWORD: root
+      POSTGRES_DB: rootdb
+    entrypoint: # ["executable", "arg"]
+      - ash
+      - -c
+      - "sleep 2000000"
+
+  importer:
+    build:
+      context: ./
+      dockerfile: ./cicd/container-images/app/Dockerfile
+      target: importer
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: root
+      PGPASSWORD: root
+      POSTGRES_DB: rootdb
+    entrypoint: # ["executable", "arg"]
+      - ash
+      - -c
+      - "sleep 2000000"
+
+  app:
+    build:
+      context: ./
+      dockerfile: ./cicd/container-images/app/Dockerfile
+      target: server
+    environment:
+      PORT: "3333"
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: root
+      PGPASSWORD: root
+      POSTGRES_DB: rootdb
+    ports:
+      - 3333:3333

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Title of the document</title>
+    </head>
+
+    <body>
+        The content of the document......
+
+        <div>
+            <h2>Products:</h2>
+            <ul>
+                {{ range .Products }}
+                    <li>{{ .Name }}</li>
+                {{ end }}
+            </ul>
+        </div>
+    </body>
+</html> 
