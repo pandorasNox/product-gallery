@@ -50,6 +50,20 @@ services:
       - -c
       - "sleep 2000000"
 
+  cli-css-generator:
+    build:
+      context: ./
+      dockerfile: ./cicd/container-images/app/Dockerfile
+      target: css-generator
+    volumes:
+      - ./templates:/templates
+      - ./static:/static
+      - ./configs/tailwind.config.js:/workdir/tailwind.config.js
+    entrypoint: # ["executable", "arg"]
+      - ash
+      - -c
+      - "sleep 2000000"
+
   app:
     build:
       context: ./

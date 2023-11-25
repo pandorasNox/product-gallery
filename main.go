@@ -57,6 +57,11 @@ func main() {
 	// processing should be stopped.
 	r.Use(middleware.Timeout(60 * time.Second))
 
+	fs := http.FileServer(http.Dir("/static"))
+	// http.Handle("/static/", http.StripPrefix("/static/", fs))
+	r.Get("/static/*", http.StripPrefix("/static/", fs).ServeHTTP)
+	// r.Get("/static/", fs.ServeHTTP)
+
 	// r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 	// 	w.Write([]byte("hi"))
 	// })

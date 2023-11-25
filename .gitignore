@@ -19,3 +19,7 @@
 
 # Go workspace file
 go.work
+
+# project related
+static/assets/css/generated/*
+!static/assets/css/generated/.gitkeep

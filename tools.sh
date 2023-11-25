@@ -42,6 +42,10 @@ function func_migrate_local() {
   docker compose exec migrate /scripts/migrate.sh
 }
 
+function func_gen_css() {
+  docker compose exec cli-css-generator npx tailwindcss -i /templates/css/input.css -o /static/assets/css/generated/output.css
+}
+
 # -----------------------------------------------------------------------------
 
 if [ -z "$*" ]
@@ -66,6 +70,11 @@ else
     if [ $1 == "migrate-local" ]
     then
       func_migrate_local 
+    fi
+
+    if [ $1 == "gen-css" ]
+    then
+      func_gen_css 
     fi
 
 fi
